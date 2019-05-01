@@ -1,0 +1,16 @@
+
+$body-bg: green;
+
+$mymap: (blue, red);
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+body {
+    //background-color: nth($mymap, 1);
+}
+
+@include media-breakpoint-up(xl) {
+	body {
+		background-color: red;
+	}
+}

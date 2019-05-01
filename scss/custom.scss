@@ -1,0 +1,153 @@
+
+$fixed-center-width: 300px;
+$fixed-left-width: 400px;
+$min-border-width-along-fixed-center-width: 180px;
+$column-padding: 15px;
+$fixed-text-width: 500px;
+
+
+.t-centered-fixed-content, 
+.t-centered-fixed-content-with-margin-left,
+.t-centered-fixed-content-with-right-text,
+.t-left-fixed-content-with-right-text
+ {
+	display: flex;
+	flex-wrap: wrap;
+	box-sizing: border-box;
+	margin-right: -$column-padding;
+	margin-left: -$column-padding;
+}
+
+.t-centered-fixed-content {
+	justify-content: center;
+}
+
+.t-centered-fixed-content-with-margin-left .t-border, .t-centered-fixed-content-with-margin-left .t-empty-border,
+.t-centered-fixed-content .t-content, .t-centered-fixed-content-with-margin-left .t-content {
+	display: block;
+	width: 100%;
+	padding: 0 $column-padding;
+	box-sizing: border-box;
+}
+
+.t-centered-fixed-content-with-margin-left .t-border {
+	min-width: $min-border-width-along-fixed-center-width;
+}
+
+.t-centered-fixed-content-with-right-text .t-content, .t-centered-fixed-content-with-right-text .t-text,
+.t-left-fixed-content-with-right-text .t-content, .t-left-fixed-content-with-right-text .t-text {
+	display: block;
+	width: max($fixed-text-width, $fixed-center-width);
+	padding: 0 $column-padding;
+	box-sizing: border-box;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.t-left-fixed-content-with-right-text .t-content, .t-left-fixed-content-with-right-text .t-text {
+	width: max($fixed-text-width, $fixed-left-width);
+	margin-left: unset;
+}	
+
+.t-centered-fixed-content-with-right-text .t-text .t-hiddeable,
+.t-left-fixed-content-with-right-text .t-text .t-hiddeable {
+	display: none;
+}
+
+@media (min-width: $fixed-center-width) {
+    .t-centered-fixed-content .t-content {
+		width: $fixed-center-width;
+		max-width: $fixed-center-width;
+		flex-grow: 1;
+		flex-shrink: 0;
+		flex-basis: $fixed-center-width;
+	}
+}
+
+@media (min-width: $fixed-center-width + $min-border-width-along-fixed-center-width) and (max-width: $fixed-center-width + 2*$min-border-width-along-fixed-center-width) {
+	.t-centered-fixed-content-with-margin-left {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+	}
+	
+	.t-centered-fixed-content-with-margin-left .t-content {
+		width: $fixed-center-width;
+		flex-grow: 0;
+		flex-shrink: 0;
+		flex-basis: $fixed-center-width;
+	}
+	
+	.t-centered-fixed-content-with-margin-left .t-empty-border {
+		flex-grow: 1;
+		padding: 0 0;
+		flex-basis: 1px;
+	}
+	.t-centered-fixed-content-with-margin-left .t-border {
+		flex-grow: 0;
+		width: 100%;
+		max-width: $min-border-width-along-fixed-center-width;
+	}
+}
+
+@media (min-width: $fixed-center-width + 2*$min-border-width-along-fixed-center-width) {
+	.t-centered-fixed-content-with-margin-left {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+	}
+	
+	.t-centered-fixed-content-with-margin-left .t-content {
+		width: $fixed-center-width;
+		flex-grow: 0;
+		flex-shrink: 0;
+		flex-basis: $fixed-center-width;
+	}
+	
+	.t-centered-fixed-content-with-margin-left .t-border, .t-centered-fixed-content-with-margin-left .t-empty-border {
+		flex-grow: 1;
+		width: 100%;
+	}
+}
+
+@mixin contentOffixContentWithRightTextMixin($width, $textGrowFactor) {
+	flex-grow: $textGrowFactor;
+	flex-shrink: 0;
+	flex-basis: $width;
+	width: $width;
+	margin-left: unset;
+	margin-right: unset;
+}
+
+@mixin fixContentWithRightTextMixin($justifyContent, $fixedWidth, $textGrowFactor) {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: $justifyContent;
+
+	.t-content {
+		@include contentOffixContentWithRightTextMixin($fixedWidth, 0);
+	}
+
+	.t-text {
+		@include contentOffixContentWithRightTextMixin($fixed-text-width, $textGrowFactor);
+
+		.t-hiddeable {
+			display: block;
+		}
+	}
+}
+
+@media (min-width: $fixed-center-width + $fixed-text-width + $column-padding) {
+	.t-centered-fixed-content-with-right-text {
+		@include fixContentWithRightTextMixin(center, $fixed-center-width, 0);
+	}
+}
+
+@media (min-width: $fixed-left-width + $fixed-text-width + $column-padding) {
+	.t-left-fixed-content-with-right-text {
+		@include fixContentWithRightTextMixin(flex-start, $fixed-left-width, 0.2);
+	}
+}
