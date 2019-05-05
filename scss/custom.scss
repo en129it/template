@@ -1,44 +1,258 @@
-
-$fixed-center-width: 300px;
+/* Width of the form content when that content is displayed in the page center */
+$fixed-content-width: 300px;
+/* Width of the form content when that content is displayed at the page left */
 $fixed-left-width: 400px;
-$min-border-width-along-fixed-center-width: 180px;
+/* Maximum width of text displayed on borders */
+$max-border-text-width: 180px;
+/* Padding between columns */
 $column-padding: 15px;
+/* Width of the text displayed at the right of the form content */
 $fixed-text-width: 500px;
+/* Outer border width */
+$outer-border-width: 15px;
 
+$fixed-center-text-padding-width: $fixed-content-width + $fixed-text-width + 2*$column-padding;
 
-.t-centered-fixed-content, 
-.t-centered-fixed-content-with-margin-left,
-.t-centered-fixed-content-with-right-text,
-.t-left-fixed-content-with-right-text
- {
-	display: flex;
-	flex-wrap: wrap;
-	box-sizing: border-box;
-	margin-right: -$column-padding;
-	margin-left: -$column-padding;
-}
+/* ######################################################################### */
 
 .t-centered-fixed-content {
-	justify-content: center;
-}
-
-.t-centered-fixed-content-with-margin-left .t-border, .t-centered-fixed-content-with-margin-left .t-empty-border,
-.t-centered-fixed-content .t-content, .t-centered-fixed-content-with-margin-left .t-content {
+	padding: 0 $outer-border-width;
+	box-sizing: content-box;
 	display: block;
-	width: 100%;
-	padding: 0 $column-padding;
-	box-sizing: border-box;
+	min-width: $fixed-content-width;
+
+	.t-content {
+	   display: block;
+	   width: $fixed-content-width;
+	   margin-left: 0px;
+	   margin-right: 0px;
+   }
 }
 
-.t-centered-fixed-content-with-margin-left .t-border {
-	min-width: $min-border-width-along-fixed-center-width;
+@media (min-width: $fixed-content-width + 2*$outer-border-width) {
+	.t-centered-fixed-content {
+		padding: $outer-border-width;
+		display: flex;
+		flex-wrap: nowrap;
+		justify-content: center;
+
+		.t-content {
+			flex: 0 0 $fixed-content-width;
+		}
+	}
+}
+
+/* ######################################################################### */
+
+.t-centered-fixed-content-and-right-text-with-margin-left {
+	padding: 0 $outer-border-width;
+	box-sizing: content-box;
+	display: block;
+	min-width: max($fixed-content-width, $max-border-text-width, $fixed-text-width);
+
+	.t-border {
+		display: block;
+		min-width: $max-border-text-width;
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+
+	.t-empty-border {
+		display: block;
+		width: 0px;
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+
+	.t-content, .t-text {
+		display: block;
+		width: max($fixed-content-width, $fixed-text-width);
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.t-text .t-hiddeable {
+		display: none;
+	}
+}
+
+@media (min-width: max($fixed-content-width, $fixed-text-width) + 2*$column-padding + 2*$outer-border-width + $max-border-text-width) {
+	.t-centered-fixed-content-and-right-text-with-margin-left {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		justify-content: space-between;
+
+		.t-border {
+			flex: 1 0 1px;
+			width: $max-border-text-width;
+		}
+
+		.t-empty-border {
+			flex: 1 0 1px;
+			width: 0px;
+		}
+
+		.t-content-text {
+			flex: 0 0 max($fixed-content-width, $fixed-text-width);
+			width: max($fixed-content-width, $fixed-text-width);
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: flex-start;
+			padding: 0 $column-padding;
+		}
+
+		.t-content, .t-text {
+			flex: 0 0 100%;
+			width: 100%;
+			padding: 0 0;
+		}
+	}
+}
+
+@media (min-width: $fixed-center-text-padding-width + 2*$outer-border-width + $max-border-text-width) {
+	.t-centered-fixed-content-and-right-text-with-margin-left {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		justify-content: flex-start;
+
+		.t-border {
+			flex: 0 0 $max-border-text-width;
+			width: $max-border-text-width;
+		}
+
+		.t-empty-border {
+			flex: 1 0 0px;
+			width: 0px;
+		}
+
+		.t-content-text {
+			flex: 0 0 $fixed-center-text-padding-width;
+			width: $fixed-center-text-padding-width;
+			padding: 0 0;
+			/* other properties are same as of smaller media */
+		}
+
+
+		.t-content {
+			flex: 0 0 $fixed-content-width;
+			width: $fixed-content-width;
+			padding: 0 $column-padding;
+		}
+
+		.t-text {
+			flex: 0 0 $fixed-text-width;
+			width: $fixed-text-width;
+
+			.t-hiddeable {
+				display: block;
+			}
+		}
+	}
+}
+
+
+@media (min-width: $fixed-center-text-padding-width + 2*$outer-border-width + 2*$max-border-text-width) {
+	.t-centered-fixed-content-and-right-text-with-margin-left {
+		/* Same as of smaller media */
+
+		.t-border, .t-empty-border {
+			flex: 1 0 $max-border-text-width;
+			width: $max-border-text-width;
+		}
+
+		/* 
+			.t-content-text : Same as of smaller media
+			.t-content : Same as of smaller media
+			.t-text : Same as of smaller media
+		*/
+	}
+}
+
+/* ######################################################################### */
+
+.t-centered-fixed-content-with-margin-left {
+	padding: 0 $outer-border-width;
+	box-sizing: content-box;
+	display: block;
+	min-width: max($fixed-content-width, $max-border-text-width);
+
+	.t-border {
+		display: block;
+		min-width: $max-border-text-width;
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+
+	.t-empty-border {
+		display: block;
+		width: 0;
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+
+	.t-content {
+		display: block;
+		width: $fixed-content-width;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+@media (min-width: $fixed-content-width + 2*$column-padding + 2*$outer-border-width + $max-border-text-width) {
+	.t-centered-fixed-content-with-margin-left {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		justify-content: flex-start;
+
+		.t-border {
+			flex: 0 0 $max-border-text-width;
+			width: $max-border-text-width;
+		}
+
+		.t-empty-border {
+			flex: 1 0 0px;
+			width: 0px;
+		}
+
+		.t-content {
+			flex: 0 0 $fixed-content-width;
+			width: $fixed-content-width;
+			padding: 0 $column-padding;
+			display: block;
+		}
+	}
+}
+
+@media (min-width: $fixed-content-width + 2*$column-padding + 2*$outer-border-width + 2*$max-border-text-width) {
+	.t-centered-fixed-content-with-margin-left {
+		/* Same as of smaller media */
+
+		.t-border, .t-empty-border {
+			flex: 1 0 $max-border-text-width;
+			width: $max-border-text-width;
+		}
+
+		/* .t-content : Same as of smaller media */
+	}
+}
+
+/* ######################################################################### */
+
+.t-centered-fixed-content-with-right-text, .t-left-fixed-content-with-right-text {
+	padding: $outer-border-width;
+	display: block;
+	min-width: max($fixed-text-width, $fixed-content-width);
 }
 
 .t-centered-fixed-content-with-right-text .t-content, .t-centered-fixed-content-with-right-text .t-text,
 .t-left-fixed-content-with-right-text .t-content, .t-left-fixed-content-with-right-text .t-text {
 	display: block;
-	width: max($fixed-text-width, $fixed-center-width);
-	padding: 0 $column-padding;
+	width: max($fixed-text-width, $fixed-content-width);
+	padding: 0 0;
 	box-sizing: border-box;
 	margin-left: auto;
 	margin-right: auto;
@@ -54,85 +268,28 @@ $fixed-text-width: 500px;
 	display: none;
 }
 
-@media (min-width: $fixed-center-width) {
-    .t-centered-fixed-content .t-content {
-		width: $fixed-center-width;
-		max-width: $fixed-center-width;
-		flex-grow: 1;
-		flex-shrink: 0;
-		flex-basis: $fixed-center-width;
-	}
-}
-
-@media (min-width: $fixed-center-width + $min-border-width-along-fixed-center-width) and (max-width: $fixed-center-width + 2*$min-border-width-along-fixed-center-width) {
-	.t-centered-fixed-content-with-margin-left {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: nowrap;
-		justify-content: space-between;
-	}
-	
-	.t-centered-fixed-content-with-margin-left .t-content {
-		width: $fixed-center-width;
-		flex-grow: 0;
-		flex-shrink: 0;
-		flex-basis: $fixed-center-width;
-	}
-	
-	.t-centered-fixed-content-with-margin-left .t-empty-border {
-		flex-grow: 1;
-		padding: 0 0;
-		flex-basis: 1px;
-	}
-	.t-centered-fixed-content-with-margin-left .t-border {
-		flex-grow: 0;
-		width: 100%;
-		max-width: $min-border-width-along-fixed-center-width;
-	}
-}
-
-@media (min-width: $fixed-center-width + 2*$min-border-width-along-fixed-center-width) {
-	.t-centered-fixed-content-with-margin-left {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: nowrap;
-		justify-content: space-between;
-	}
-	
-	.t-centered-fixed-content-with-margin-left .t-content {
-		width: $fixed-center-width;
-		flex-grow: 0;
-		flex-shrink: 0;
-		flex-basis: $fixed-center-width;
-	}
-	
-	.t-centered-fixed-content-with-margin-left .t-border, .t-centered-fixed-content-with-margin-left .t-empty-border {
-		flex-grow: 1;
-		width: 100%;
-	}
-}
-
-@mixin contentOffixContentWithRightTextMixin($width, $textGrowFactor) {
-	flex-grow: $textGrowFactor;
+@mixin contentOffixContentWithRightTextMixin($width, $padding-width) {
+	flex-grow: 0;
 	flex-shrink: 0;
 	flex-basis: $width;
 	width: $width;
+	padding: 0 $padding-width;
 	margin-left: unset;
 	margin-right: unset;
 }
 
-@mixin fixContentWithRightTextMixin($justifyContent, $fixedWidth, $textGrowFactor) {
+@mixin fixContentWithRightTextMixin($justifyContent, $fixedWidth) {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
 	justify-content: $justifyContent;
 
 	.t-content {
-		@include contentOffixContentWithRightTextMixin($fixedWidth, 0);
+		@include contentOffixContentWithRightTextMixin($fixedWidth, $column-padding);
 	}
 
 	.t-text {
-		@include contentOffixContentWithRightTextMixin($fixed-text-width, $textGrowFactor);
+		@include contentOffixContentWithRightTextMixin($fixed-text-width, 0);
 
 		.t-hiddeable {
 			display: block;
@@ -140,14 +297,14 @@ $fixed-text-width: 500px;
 	}
 }
 
-@media (min-width: $fixed-center-width + $fixed-text-width + $column-padding) {
+@media (min-width: $fixed-content-width + $fixed-text-width + $column-padding) {
 	.t-centered-fixed-content-with-right-text {
-		@include fixContentWithRightTextMixin(center, $fixed-center-width, 0);
+		@include fixContentWithRightTextMixin(center, $fixed-content-width);
 	}
 }
 
 @media (min-width: $fixed-left-width + $fixed-text-width + $column-padding) {
 	.t-left-fixed-content-with-right-text {
-		@include fixContentWithRightTextMixin(flex-start, $fixed-left-width, 0.2);
+		@include fixContentWithRightTextMixin(flex-start, $fixed-left-width);
 	}
 }
